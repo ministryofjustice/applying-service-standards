@@ -15,3 +15,5 @@ services:
       - ./public:/home/node/public/
     ports:
       - "3052:3052"
+      - "3000:3000"
+      - "3001:3001"

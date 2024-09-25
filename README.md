@@ -9,22 +9,20 @@ Docker
 
 ## Then run the app
 
-Add a .env file and add the following keys:
+Run `make run`
 
-```
-ASSET_PATH="/home/node/"
-RECAPTCHA_PUBLIC=some_text
-RECAPTCHA_SECRET=some_text
-FEEDBACK_TEMPLATE_ID=notify_feedback_template
-NOTIFY_API_KEY=preprod-notify-api-key
+## Access points
 
-AIRTABLE_TOKEN=some_token
-AIRTABLE_BASE_ID=some_id
+Hot reload version (BrowserSync)<br>
+**http://localhost:3000**
 
-BASE_URL=http://localhost:3052
-```
+The application<br>
+**http://localhost:3052**
 
-Run `docker compose up`
+BrowserSync UI<br>
+**http://localhost:3001**
+
+
 
 > [!NOTE]
 > You may see "Deprecation Warning: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0."
