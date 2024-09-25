@@ -117,7 +117,7 @@ gulp.task(
     'process-files',
     'process-js',
     'process-images-copy',
-    'process-images',
+    /*'process-images',*/
     'watch',
   ),
 )
