@@ -1,0 +1,11 @@
+# Editor
+.idea*
+.DS_*
+._DS_*
+._.*
+.editorconfig
+
+node_modules
+.env
+.DS_Store
+public

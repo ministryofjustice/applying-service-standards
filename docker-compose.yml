@@ -1,0 +1,18 @@
+volumes:
+  node_modules:
+
+services:
+  node:
+    build:
+      context: .
+      target: dev
+    container_name: standards-node
+    env_file:
+      - .env
+    volumes:
+      - ./node_modules:/home/node/node_modules
+      - ./app:/home/node/app
+    ports:
+      - "3052:3052"
+      - "3000:3000"
+      - "3001:3001"
