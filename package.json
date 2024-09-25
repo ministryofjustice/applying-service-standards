@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "gulp": "gulp",
-    "watch": "gulp & nodemon index.js",
+    "watch": "gulp default & nodemon index.js",
     "start": "node index.js",
     "dev": "npm run watch"
   },
