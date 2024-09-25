@@ -3,8 +3,6 @@ FROM node:20-alpine AS base-node
 COPY --chown=node:node ./ /home/node/
 WORKDIR /home/node/
 
-RUN source .env
-
 
 FROM base-node AS dev
 
