@@ -1,42 +1,31 @@
-# Apply the Service Standard in DfE
+# Apply the Service Standard
 
-Guidance and information for working to the Government Service Standard in the Department for Education.
+Guidance and information for working to the Government Service Standard in the Ministry of Justice.
 
 
 ## Prerequisites
 
-Node.JS LTS version
-
-GitHub
-
-and Nodemon installed globally
-
-Run `npm i nodemon -g`
+Docker
 
 ## Then run the app
 
 Add a .env file and add the following keys:
 
 ```
-recaptchaPublic=x
-recaptchaSecret=x
-feedbackTemplateID=x
-notifyKey=preprod-x
+ASSET_PATH="/home/node/"
+RECAPTCHA_PUBLIC=some_text
+RECAPTCHA_SECRET=some_text
+FEEDBACK_TEMPLATE_ID=notify_feedback_template
+NOTIFY_API_KEY=preprod-notify-api-key
+
+AIRTABLE_TOKEN=some_token
+AIRTABLE_BASE_ID=some_id
+
 BASE_URL=http://localhost:3052
 ```
-Contact Design Ops for the keys to use in your local environment. These must never be checked in to source code - the file is included in the .GITIGNORE file.
 
-Run `npm install`
+Run `docker compose up`
 
-Run `npm run dev`
-
-While this is the same command for GOV.UK prototypes, this app is not built using the kit.
-
-We've just made it easier to remember what commands to run for those unfamiliar with 
-running Node apps locally.
-
-> Information
->
-> When running this command, you may see "Deprecation Warning: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0."
-> 
+> [!NOTE]
+> You may see "Deprecation Warning: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0."
 > These are from the GOV.UK Frontend and you do not need to do anything.
