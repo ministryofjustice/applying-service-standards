@@ -5,7 +5,13 @@
 ._.*
 .editorconfig
 
-node_modules
+# Environment
 .env
-.DS_Store
-public
+
+# Modules
+node_modules/*
+!node_modules/.keep
+
+# Public
+public/*
+!public/.keep
