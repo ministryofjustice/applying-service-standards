@@ -1,6 +1,6 @@
 {
   "name": "applying-service-standard",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "airtable": "^0.12.2",
     "axios": "^1.3.6",
