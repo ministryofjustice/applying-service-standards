@@ -20,11 +20,6 @@ spec:
       labels:
         app: ${KUBE_NAMESPACE}
     spec:
-      volumes:
-        - name: uploads
-          emptyDir: { }
-        - name: php-socket
-          emptyDir: { }
       terminationGracePeriodSeconds: 35
       serviceAccountName: ${KUBE_NAMESPACE}-service
       containers:
@@ -55,3 +50,5 @@ spec:
                 name: ${KUBE_NAMESPACE}
             - secretRef:
                 name: ${KUBE_NAMESPACE}-secrets
+            - secretRef:
+                name: ${KUBE_NAMESPACE}-base64-secrets
