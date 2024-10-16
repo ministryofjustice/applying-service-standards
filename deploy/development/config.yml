@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: applying-service-standards-dev
+  namespace: applying-service-standards-dev
+data:
+  ENV: "development"
