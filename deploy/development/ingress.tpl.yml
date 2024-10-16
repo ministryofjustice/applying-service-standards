@@ -10,7 +10,7 @@ metadata:
     nginx.ingress.kubernetes.io/modsecurity-snippet: |
       SecAuditEngine On
       SecRuleEngine DetectionOnly
-      SecDefaultAction "phase:2,pass,log,tag:github_team=central-digital-product-team,tag:namespace=applying-service-standards"
+      SecDefaultAction "phase:2,pass,log,tag:github_team=central-digital-product-team,tag:namespace=applying-service-standards-dev"
     nginx.ingress.kubernetes.io/auth-type: basic
     nginx.ingress.kubernetes.io/auth-secret: basic-auth-secret
     nginx.ingress.kubernetes.io/auth-realm: 'Development Access | Authentication Required'
