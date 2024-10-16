@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${KUBE_NAMESPACE}
+  namespace: ${KUBE_NAMESPACE}
+  labels:
+    app: ${KUBE_NAMESPACE}
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 100%
+  selector:
+    matchLabels:
+      app: ${KUBE_NAMESPACE}
+  template:
+    metadata:
+      labels:
+        app: ${KUBE_NAMESPACE}
+    spec:
+      volumes:
+        - name: uploads
+          emptyDir: { }
+        - name: php-socket
+          emptyDir: { }
+      terminationGracePeriodSeconds: 35
+      serviceAccountName: ${KUBE_NAMESPACE}-service
+      containers:
+        - name: node
+          image: ${ECR_URL}:${IMAGE_TAG}
+          resources:
+            limits:
+              cpu: 500m
+              memory: 250Mi
+            requests:
+              cpu: 50m
+              memory: 100Mi
+          ports:
+            - containerPort: 3052
+              name: http
+          securityContext:
+            runAsUser: 1000
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: 3052
+          livenessProbe:
+            httpGet:
+              path: /liveness
+              port: 3052
+          envFrom:
+            - configMapRef:
+                name: ${KUBE_NAMESPACE}
+            - secretRef:
+                name: ${KUBE_NAMESPACE}-secrets
+            - secretRef:
+                name: ${KUBE_NAMESPACE}-base64-secrets

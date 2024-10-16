@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: applying-service-standards-service-dashboard
+  namespace: applying-service-standards-dev
+  labels:
+    grafana_dashboard: "applying-service-standards-dev-service"
+data:
+  applying-service-standards-dev-service-dashboard.json: |

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  namespace: applying-service-standards-dev
+  labels:
+    app: applying-service-standards-dev
+spec:
+  ports:
+  - port: 3052
+    name: http
+  selector:
+    app: applying-service-standards-dev
