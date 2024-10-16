@@ -71,4 +71,4 @@ jobs:
 
       - name: "Apply manifest files"
         run: |
-          kubectl -n ${KUBE_NAMESPACE} apply -f deploy/${{ inputs.environment }}
+          kubectl apply -f deploy/${{ inputs.environment }} -n ${KUBE_NAMESPACE}
