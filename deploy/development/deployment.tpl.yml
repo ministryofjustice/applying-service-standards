@@ -37,14 +37,6 @@ spec:
               name: http
           securityContext:
             runAsUser: 1000
-          readinessProbe:
-            httpGet:
-              path: /readiness
-              port: 3052
-          livenessProbe:
-            httpGet:
-              path: /liveness
-              port: 3052
           envFrom:
             - configMapRef:
                 name: ${KUBE_NAMESPACE}
