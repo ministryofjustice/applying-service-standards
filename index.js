@@ -145,6 +145,8 @@ app.post('/form-response/helpful', (req, res) => {
     "URL": pageURL
   });
 
+  res.json({ success: true, message: 'Feedback submitted successfully' });
+
   // base('Data').create([
   //   {
   //     "fields": {
