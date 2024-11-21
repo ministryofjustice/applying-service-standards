@@ -25,9 +25,9 @@ var NotifyClient = require('notifications-node-client').NotifyClient
 
 require('dotenv').config()
 const app = express();
-const notify = new NotifyClient(process.env.NOTIFY_API_KEY);
-const Airtable = require('airtable');
-const base = new Airtable({ apiKey: process.env.AIRTABLE_TOKEN }).base(process.env.AIRTABLE_BASE_ID);
+const notify = new NotifyClient(process.env.GOV_NOTIFY_API_KEY);
+// const Airtable = require('airtable');
+// const base = new Airtable({ apiKey: process.env.AIRTABLE_TOKEN }).base(process.env.AIRTABLE_BASE_ID);
 
 
 
@@ -103,6 +103,7 @@ if (config.env !== 'development') {
   }, 2000)
 }
 
+// TODO - this route is not implemented in the frontend. Should it should be removed?
 app.post('/submit-feedback', (req, res) => {
   const feedback = req.body.feedback_form_input
   const fullUrl = req.headers.referer || 'Unknown'
@@ -137,21 +138,28 @@ app.post('/form-response/helpful', (req, res) => {
   const pageURL = req.headers.referer || 'Unknown';
   const date = new Date().toISOString();
 
-  base('Data').create([
-    {
-      "fields": {
-        "Response": response,
-        "Service": service,
-        "URL": pageURL
-      }
-    }
-  ], function (err) {
-    if (err) {
-      console.error(err);
-      return res.status(500).send('Error saving to Airtable');
-    }
-    res.json({ success: true, message: 'Feedback submitted successfully' });
+  // TODO: For now, log the submitted data, but later, write code to store it.
+  console.log('Data', {
+    "Response": response,
+    "Service": service,
+    "URL": pageURL
   });
+
+  // base('Data').create([
+  //   {
+  //     "fields": {
+  //       "Response": response,
+  //       "Service": service,
+  //       "URL": pageURL
+  //     }
+  //   }
+  // ], function (err) {
+  //   if (err) {
+  //     console.error(err);
+  //     return res.status(500).send('Error saving to Airtable');
+  //   }
+  //   res.json({ success: true, message: 'Feedback submitted successfully' });
+  // });
 });
 
 // New route for handling detailed feedback submissions
@@ -162,19 +170,28 @@ app.post('/form-response/feedback', (req, res) => {
   const pageURL = req.headers.referer || 'Unknown'; // Attempt to capture the referrer URL
   const date = new Date().toISOString();
 
-  base('Feedback').create([{
-    "fields": {
+  // TODO: For now, log the submitted data, but later, write code to store it.
+  console.log('Feedback', {
       "Feedback": response,
       "Service": service,
       "URL": pageURL
-    }
-  }], function (err) {
-    if (err) {
-      console.error(err);
-      return res.status(500).send('Error saving to Airtable');
-    }
-    res.json({ success: true, message: 'Feedback submitted successfully' });
   });
+
+  res.json({ success: true, message: 'Feedback submitted successfully' });
+
+  // base('Feedback').create([{
+  //   "fields": {
+  //     "Feedback": response,
+  //     "Service": service,
+  //     "URL": pageURL
+  //   }
+  // }], function (err) {
+  //   if (err) {
+  //     console.error(err);
+  //     return res.status(500).send('Error saving to Airtable');
+  //   }
+  //   res.json({ success: true, message: 'Feedback submitted successfully' });
+  // });
 });
 
 app.get(/\.html?$/i, function (req, res) {

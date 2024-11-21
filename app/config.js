@@ -10,10 +10,11 @@ module.exports = {
   port: process.env.PORT || 3052,
   githubrepo: 'https://github.com/DFE-Digital/apply-the-service-standard-in-dfe',
   
-  assetPath: process.env.ASSET_PATH,
+  // TODO: consider removing this as I can't see a reference to it in the codebase.
+  assetPath: "/home/node/",
 
-  AIRTABLE_API_KEY: process.env.AIRTABLE_API_KEY,
-  airtableFeedbackBase: process.env.AIRTABLE_FEATURE_BASE_URL
+  // AIRTABLE_API_KEY: process.env.AIRTABLE_API_KEY,
+  // airtableFeedbackBase: process.env.AIRTABLE_FEATURE_BASE_URL
 };
 
 
