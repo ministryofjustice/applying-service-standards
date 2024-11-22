@@ -12,8 +12,10 @@ const browserSync = require('browser-sync').create()
 gulp.task('process-scss', function () {
   return gulp
     .src('app/assets/scss/**/*.scss')
-    .pipe(sass({ quiet: true }))
-    .pipe(sass().on('error', sass.logError))
+    .pipe(sass({ 
+      quietDeps: true, 
+      includePaths: ['node_modules']
+    }).on('error', sass.logError))
     .pipe(cleanCSS())
     .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest('public/assets/css'))
