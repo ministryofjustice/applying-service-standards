@@ -1,7 +1,4 @@
-require('dotenv').config();
-const { link } = require('fs');
 const { marked } = require('marked');
-const axios = require('axios')
 
 const client = require('../../middleware/contentful.js');
 

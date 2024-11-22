@@ -109,9 +109,9 @@ gulp.task('watch', function () {
 })
 
 
-// Set up a default task to process assets and start the watch task
+// Set up a build task to process assets
 gulp.task(
-  'default',
+  'build',
   gulp.series(
     'process-scss',
     'copy-assets',
@@ -119,6 +119,14 @@ gulp.task(
     'process-js',
     'process-images-copy',
     /*'process-images',*/
+  ),
+)
+
+// Set up a default task to process assets and start the watch task
+gulp.task(
+  'default',
+  gulp.series(
+    'build',
     'watch',
   ),
 )

@@ -10,9 +10,17 @@ services:
     env_file:
       - .env
     volumes:
-      - ./node_modules:/home/node/node_modules
+      - node_modules:/home/node/node_modules
+      # Folders
       - ./app:/home/node/app
-      - ./public:/home/node/public/
+      - ./middleware:/home/node/middleware
+      - ./public:/home/node/public
+      # Files
+      - ./gulpfile.js:/home/node/gulpfile.js
+      - ./index.js:/home/node/index.js
+      - ./nodemon.json:/home/node/nodemon.json
+      - ./package.json:/home/node/package.json
+      - ./package-lock.json:/home/node/package-lock.json
     ports:
       - "3052:3052"
       - "3000:3000"
