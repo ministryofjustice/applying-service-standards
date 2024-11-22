@@ -1,7 +1,7 @@
 module.exports = {
 
   // Base URL
-  baseURL: process.env.BASE_URL || 'https://apply-the-service-standard.justice.com/',
+  baseURL: process.env.BASE_URL || 'https://apply-the-service-standard.justice.gov.uk/',
 
   // Environment
   env: process.env.NODE_ENV || 'development',

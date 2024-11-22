@@ -1,0 +1,12 @@
+services:
+  node-prod:
+    build:
+      context: .
+      target: build-prod
+    container_name: standards-node-prod
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "3052:3052"

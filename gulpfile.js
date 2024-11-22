@@ -55,7 +55,7 @@ gulp.task('copy-assets', function () {
 
 gulp.task('process-images-copy', async function () {
   return gulp
-    .src('app/assets/images/**/*')
+    .src('app/assets/images/**/*', {encoding: false})
     .pipe(gulp.dest('public/assets/images'))
 })
 
@@ -67,7 +67,7 @@ gulp.task('process-files', async function () {
 
 gulp.task('process-images', async function () {
   return gulp
-    .src('app/assets/images/**/*.png')
+    .src('app/assets/images/**/*.png', {encoding: false})
     .pipe(webp())
     .pipe(gulp.dest('public/assets/images'))
 })

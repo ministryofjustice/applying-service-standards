@@ -59,6 +59,16 @@ down:
 	docker compose down
 
 
+# Production environment for testing the production builds locally
+
+build-prod: 
+	docker compose -f docker-compose.prod.yml build
+
+run-prod: up-prod
+
+up-prod:
+	docker compose -f docker-compose.prod.yml  up
+
 
 #   █▄▀  █░█  █▄▄  █▀▀  █▀█  █▄░█  █▀▀  ▀█▀  █▀▀  █▀
 #   █░█  █▄█  █▄█  ██▄  █▀▄  █░▀█  ██▄  ░█░  ██▄  ▄█

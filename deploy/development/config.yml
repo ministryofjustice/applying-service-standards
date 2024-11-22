@@ -5,5 +5,5 @@ metadata:
   namespace: applying-service-standards-dev
 data:
   ENV: "development"
-  BASE_URL: "dev-applying-service-standards.apps.live.cloud-platform.service.justice.gov.uk"
+  BASE_URL: "https://dev-applying-service-standards.apps.live.cloud-platform.service.justice.gov.uk"
   FEEDBACK_TEMPLATE_ID: "notify_feedback_template"
