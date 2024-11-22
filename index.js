@@ -1,32 +1,29 @@
+// node packages
+const path = require('node:path')
+
+// npm packages
 const express = require('express')
 const nunjucks = require('nunjucks')
-const https = require('https')
-const axios = require('axios')
-var dateFilter = require('nunjucks-date-filter')
-var markdown = require('nunjucks-markdown')
-var marked = require('marked')
+const dateFilter = require('nunjucks-date-filter')
+const markdown = require('nunjucks-markdown')
+const marked = require('marked')
 const bodyParser = require('body-parser')
-const lunr = require('lunr')
-const fs = require('fs')
-const path = require('path')
-const cheerio = require('cheerio')
-const config = require('./app/config')
-const glob = require('glob');
-const routes = require('./app/routes');
-
-const helmet = require('helmet');
-
 const favicon = require('serve-favicon');
+// TODO - use these, or delete and uninstall.
+// const helmet = require('helmet');
+// const Airtable = require('airtable');
 
+// Relative
+const config = require('./app/config')
+const routes = require('./app/routes');
 const PageIndex = require('./middleware/pageIndex')
+
 const pageIndex = new PageIndex(config)
 
 var NotifyClient = require('notifications-node-client').NotifyClient
 
-require('dotenv').config()
 const app = express();
 const notify = new NotifyClient(process.env.GOV_NOTIFY_API_KEY);
-// const Airtable = require('airtable');
 // const base = new Airtable({ apiKey: process.env.AIRTABLE_TOKEN }).base(process.env.AIRTABLE_BASE_ID);
 
 
@@ -262,13 +259,5 @@ matchRoutes = function (req, res, next) {
 }
 
 // Start the server
-
-// // Run application on configured port
-// if (config.env === 'development') {
-//   app.listen(config.port - 50, () => {
-//   });
-// } else {
-//   app.listen(config.port);
-// }
-
+// Run application on configured port
 app.listen(config.port)

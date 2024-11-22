@@ -12,8 +12,10 @@ const browserSync = require('browser-sync').create()
 gulp.task('process-scss', function () {
   return gulp
     .src('app/assets/scss/**/*.scss')
-    .pipe(sass({ quiet: true }))
-    .pipe(sass().on('error', sass.logError))
+    .pipe(sass({ 
+      quietDeps: true, 
+      includePaths: ['node_modules']
+    }).on('error', sass.logError))
     .pipe(cleanCSS())
     .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest('public/assets/css'))
@@ -109,9 +111,9 @@ gulp.task('watch', function () {
 })
 
 
-// Set up a default task to process assets and start the watch task
+// Set up a build task to process assets
 gulp.task(
-  'default',
+  'build',
   gulp.series(
     'process-scss',
     'copy-assets',
@@ -119,6 +121,14 @@ gulp.task(
     'process-js',
     'process-images-copy',
     /*'process-images',*/
+  ),
+)
+
+// Set up a default task to process assets and start the watch task
+gulp.task(
+  'default',
+  gulp.series(
+    'build',
     'watch',
   ),
 )

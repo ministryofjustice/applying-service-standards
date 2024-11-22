@@ -219,14 +219,14 @@ class PageIndex {
     return $(`meta[name='${name}']`).attr('content');
   }
 
-  // Some magic to handle basic auth
+  // Add basic auth config, if the environment variables are set.
   getConnectionConfig() {
-    const { MANUAL_USERNAME, MANUAL_PASSWORD } = process.env;
-    if (MANUAL_USERNAME || MANUAL_PASSWORD) {
+    const { BASIC_AUTH_USER, BASIC_AUTH_PASS } = process.env;
+    if (BASIC_AUTH_USER?.length && BASIC_AUTH_PASS?.length) {
       return {
         auth: {
-          password: MANUAL_PASSWORD,
-          username: MANUAL_USERNAME,
+          username: BASIC_AUTH_USER,
+          password: BASIC_AUTH_PASS,
         },
       };
     }
