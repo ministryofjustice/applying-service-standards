@@ -1,0 +1,49 @@
+{% extends "layouts/full.html" %}
+{% set pageName = fields.title %}
+
+{% block hero %}
+<section class="dfe-page-hero">
+    <div class="govuk-width-container">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <h1 class="govuk-heading-xl">{{fields.title}}</h1>
+                <p class="govuk-body-l">{{fields.description}}</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+
+{% for page in toc %}
+<div class="dfe-width-container govuk-!-margin-top-0">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <section>
+                <div class="govuk-!-margin-top-3 govuk-!-margin-bottom-5">
+                    <div class="govuk-grid-row split-panel" style="background: #f3f2f1;">
+                        <div class="govuk-grid-column-one-half text-column">
+                            <h2 class="govuk-heading-l govuk-!-margin-top-3">{{page.title}}</h2>
+                            <p class="govuk-body-l">{{page.description}}</p>
+
+                            <ul class="govuk-list govuk-list--spaced">
+                                <li>
+                                    <a href="{{ slug ~ "/" ~ page.slug }}">Guidance for this phase</a>
+                                </li>
+                            </ul>
+
+                        </div>
+                        <div class="govuk-grid-column-one-half image-column">
+                            <div class="image-container"
+                                style="background-image: url('{{ page.thumbnailImage.fields.file.url }}');"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
