@@ -37,6 +37,7 @@ function getExtension(url) {
 
 /**
  * Retrieves linked content information from an entry.
+ * Links can be to other content, assets, or external URLs so must be handled slightly differently.
  * @param {Object} entry - The entry object.
  * @returns {Object} - The linked content information.
  */
@@ -71,7 +72,7 @@ function getLinkedContent(entry) {
 /**
  * Retrieves sidebar navigation links from a navigation entry.
  * @param {Object} nav - The navigation entry object.
- * @returns {Array} - The sidebar navigation links.
+ * @returns {Array} - The sidebar navigation links or link collections.
  */
 function getSidebarNavigation(nav) {
     return nav.fields.links?.map((link) => {
@@ -94,7 +95,7 @@ function getSidebarNavigation(nav) {
 }
 
 /**
- * Retrieves table of contents links from a table of contents entry.
+ * Retrieves links from a table of contents entry.
  * @param {Array} toc - The table of contents entry array.
  * @returns {Array} - The table of contents links.
  */
@@ -111,7 +112,7 @@ function getTableOfContents(toc) {
 
 /**
  * Retrieves service standard fields from an entry.
- * @param {Object} entry - The entry object.
+ * @param {Object} entry - The serviceStandard object.
  * @returns {Object} - The service standard fields.
  */
 function getServiceStandardFields(entry) {
@@ -135,8 +136,8 @@ function getDeliveryPhaseFields(entry) {
 }
 
 /**
- * Retrieves homepage fields from an entry.
- * @param {Object} entry - The entry object.
+ * Retrieves homepage fields from the 'homepage' content type.
+ * @param {Object} entry - The homepage object.
  * @returns {Object} - The homepage fields.
  */
 function getHomepageFields(entry) {
@@ -155,9 +156,9 @@ function getHomepageFields(entry) {
 }
 
 /**
- * Retrieves basic page fields from an entry.
+ * Retrieves basic page fields from the 'basic' content type.
  * @param {Object} entry - The entry object.
- * @param {string} pageType - The type of the page.
+ * @param {string} pageType - The page type, either 'Service standard', 'Delivery phase', or 'Service assessment'.
  * @returns {Object} - The basic page fields.
  */
 function getBasicPageFields(entry, pageType) {
@@ -188,7 +189,7 @@ function getBasicPageFields(entry, pageType) {
 }
 
 /**
- * Retrieves landing page fields from an entry.
+ * Retrieves landing page fields from the 'landing' content type.
  * @param {Object} entry - The entry object.
  * @returns {Object} - The landing page fields.
  */
@@ -213,7 +214,7 @@ function getLandingPageFields(entry) {
 }
 
 /**
- * Handles the homepage route and renders the homepage with the main content and service standards.
+ * Handles the homepage route and renders the homepage with the main content and service standards list.
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  */
@@ -227,7 +228,7 @@ exports.g_home = async function (req, res) {
             client.getEntries({
                 content_type: 'homepage',
                 'fields.slug': 'homepage',
-                include: 4,
+                include: 4, // The depth to reference entries within other entries
             })
         ]);
 
@@ -249,6 +250,7 @@ exports.g_home = async function (req, res) {
             );
         });
 
+        // Sort into alphanumeric order
         serviceStandards.sort((a, b) => {
             return a.serviceStandard?.standardNumber - b.serviceStandard?.standardNumber;
         });
@@ -263,6 +265,7 @@ exports.g_home = async function (req, res) {
 
 /**
  * Handles the page route and renders the appropriate page based on the slug.
+ * This applies to both 'landing' and 'basic' content types
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  */

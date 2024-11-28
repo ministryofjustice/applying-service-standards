@@ -1,5 +1,8 @@
 const client = require('../../middleware/contentful.js');
 
+
+// TODO: This should be made into a helper function for consistency.
+//       At present contentful doesn't have a method to get nested urls so we need to get the parent entry.
 /**
  * Generates a URL from a slug and its parent entry.
  * @param {string} slug - The slug of the entry.
