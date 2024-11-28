@@ -3,22 +3,14 @@
 {% set selectedNav = "Service Standard" %}
 {% set pageName = "Homepage" %}
 {% set seoPageName = "Homepage" %}
-{% set pageDescription = "Guidance and information for how to apply the GOV.UK Service Standard to design and build
-accessible, usable and understandable services in the Department for Education."%}
-{% set selectedNav = "Service Standard" %}
-
 
 {% block hero %}
 <section class="dfe-page-hero">
     <div class="dfe-width-container ">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-
-                <h1 class="govuk-heading-xl">Apply the Service Standard in <br />Justice Digital</h1>
-                <p class="govuk-body-l">Guidance and information for how to apply the <a
-                        href="https://www.gov.uk/service-manual/service-standard" target="_blank"
-                        class="govuk-link govuk-link--inverse">Government Service Standard</a> to design and build accessible,
-                    usable and understandable services in Justice Digital.</p>
+                <h1 class="govuk-heading-xl">{{mainContent.title}}</h1>
+                <p class="govuk-body-l">{{mainContent.description|safe}}</p>
             </div>
         </div>
     </div>
@@ -26,21 +18,19 @@ accessible, usable and understandable services in the Department for Education."
 {% endblock %}
 
 {% block content %}
-
 <section class="govuk-!-margin-bottom-9">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-
             <h2 class="govuk-heading-l">Guidance for applying the standards</h2>
         </div>
 
         <div class="govuk-grid-column-two-thirds">
 
             <ol class="govuk-list dfe-list--bordered">
-                {% for standardPage in standardPages %}
+                {% for standard in serviceStandards %}
                 <li>
-                    <a class="govuk-link govuk-link--no-visited-state" href="{{ "/" ~ standardPage.page.slug }}">
-                        <span class="dfe-list--number">{{standardPage.standard.standardNumber}}</span>. {{standardPage.standard.name}}</a>
+                    <a class="govuk-link govuk-link--no-visited-state" href="{{ "/service-standard/" ~ standard.slug }}">
+                        <span class="dfe-list--number">{{standard.serviceStandard.standardNumber}}</span>. {{standard.serviceStandard.name}}</a>
                 </li>
                 {% endfor %}
             </ol>
@@ -49,41 +39,27 @@ accessible, usable and understandable services in the Department for Education."
         <div class="govuk-grid-column-one-third">
 
             <div class="dfe-grid-container">
-
+                {% for block in mainContent.sidebarBlocks %}
                 <div class="dfe-card">
 
                     <div class="dfe-card-container">
-
+                        {% if block.heading %}
+                            <h2 class="govuk-heading-m">
+                                <a class="govuk-link govuk-link--no-visited-state dfe-card-link--header"
+                                   href="/service-assessments">{{block.heading}}</a>
+                            </h2>
+                        {% endif %}
                         <a class="govuk-link govuk-link--no-visited-state dfe-card-link--header"
-                           href="/assets/files/standard-points-guidance-v01-dec-2022.xlsx">
-                            <span class="govuk-visually-hidden">Download all guidance</span></a>
-
-                        <p>
-                            All the guidance for each of the Service Standard points.</p>
-                        <p class="govuk-body-s">Excel - 98kb<br />Last updated: 1 December 2022</p>
+                           href="{{ block.linkedContent.url }}">
+                            <span class="govuk-visually-hidden">Go to {{block.heading}}</span>
+                        </a>
+                        <p>{{ block.description }}</p>
+                        {% if block.linkedContent.type === 'linkedAsset' %}
+                            <p class="govuk-body-s">{{block.linkedContent.filetype}} - {{ block.linkedContent.filesize }}<br />Updated on: {{ block.linkedContent.updatedDate }}</p>
+                        {% endif %}
                     </div>
                 </div>
-
-                <div class="dfe-card">
-                    <div class="dfe-card-container">
-                        <h2 class="govuk-heading-m">
-                            <a class="govuk-link govuk-link--no-visited-state dfe-card-link--header"
-                               href="/service-assessments">Service
-                                assessments</a>
-                        </h2>
-                        <p>Understanding the service assessment process in the Department for Education.</p>
-                    </div>
-                </div>
-
-                <div class="dfe-card">
-                    <div class="dfe-card-container">
-                        <h2 class="govuk-heading-m">
-                            <a class="govuk-link govuk-link--no-visited-state dfe-card-link--header"
-                               href="https://standards.education.gov.uk">DfE Standards manual</a>
-                        </h2>
-                        <p>Find and understand standards for design, user research, technology and architecture for delivering good Department for Education services.</p>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
 
         </div>
