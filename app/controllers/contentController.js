@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const client = require('../../middleware/contentful.js');
 const documentToHtmlString = require('@contentful/rich-text-html-renderer').documentToHtmlString;
 
