@@ -1,0 +1,12 @@
+# Ignore everything
+*
+# Allow these files
+!app
+!bin
+!middleware
+!public
+!gulpfile.js
+!index.js
+!nodemon.json
+!package-lock.json
+!package.json
