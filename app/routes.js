@@ -1,12 +1,12 @@
 const express = require('express')
 const router = express.Router()
 
+const contentController = require('./controllers/contentController.js');
+const searchController = require('./controllers/searchController.js');
 
-const standardController = require('./controllers/standardController.js');
-
-router.get("/", standardController.g_home);
-router.get("/service-standard/:slug", standardController.g_standard);
-router.get("/phases/:phase", standardController.g_phase);
+router.get("/search", searchController.g_search)
+router.get("/", contentController.g_home);
+router.get("/:parent?/:slug", contentController.g_page);
 
 
 module.exports = router

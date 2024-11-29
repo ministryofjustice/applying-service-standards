@@ -1,0 +1,63 @@
+{% extends "layouts/content-with-sidenav.html" %}
+
+{% set pageName = mainContent.title %}
+{% set pageDescription = "" %}
+{% set sidebarNavigation = mainContent.sidebar %}
+{% set selectedNav = 'Phases' if mainContent.pageType === 'Phase' else 'Service assessments' %}
+{% set lastUpdated = "May 2024"%}
+{% set backlog_issue_id = "" %}
+
+<!--If this is a service standard page-->
+{% if mainContent.pageType === 'Service standard' %}
+    {% set selectedNav = 'Service Standard' %}
+    {% set point = mainContent.serviceStandard.standardNumber %}
+    {% set pageDescriptionPageOverride = "This guidance will help you apply <a
+            href='"+mainContent.serviceStandard.serviceManualUrl+"' rel='noopener noreferrer' target='_blank'>standard point " +
+        mainContent.serviceStandard.standardNumber + "<span class='govuk-visually-hidden'> (opens in a new tab)</span></a>." %}
+{% endif %}
+
+{% block heroExtra %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        {% if mainContent.pageType === 'Service standard' %}
+        <p class="govuk-!-margin-bottom-5">Everyone is responsible for meeting the Service Standard. This standard point
+            is most relevant to:</p>
+        {% for role in mainContent.serviceStandard.relevantJobRoles %}
+        <strong class="govuk-tag">{{ role.fields.name }}</strong>
+        {% endfor %}
+        {% else %}
+        <p class="govuk-!-margin-bottom-5">{{ mainContent.description }}</p>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock%}
+
+{% block content %}
+
+<style>
+    .govuk-tag {
+        max-width: fit-content !important;
+    }
+</style>
+
+{{ mainContent.content|safe }}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const mainContainer = document.querySelector('#main-content');
+        if (mainContainer) {
+            const links = mainContainer.querySelectorAll('a[href^="https"]');
+
+            links.forEach(link => {
+                // Add rel and target attributes
+                link.setAttribute('rel', 'noreferrer noopener');
+                link.setAttribute('target', '_blank');
+            });
+        }
+    });
+</script>
+{% endblock %}
