@@ -3,30 +3,44 @@ const path = require('node:path')
 
 // npm packages
 const express = require('express')
+const session = require('express-session');
 const nunjucks = require('nunjucks')
 const dateFilter = require('nunjucks-date-filter')
 const markdown = require('nunjucks-markdown')
 const marked = require('marked')
 const bodyParser = require('body-parser')
 const favicon = require('serve-favicon');
+const { NotifyClient } = require('notifications-node-client');
 // TODO - use these, or delete and uninstall.
 // const helmet = require('helmet');
 // const Airtable = require('airtable');
 
 // Relative
 const config = require('./app/config')
-const routes = require('./app/routes');
+
+const authRouter = require('./app/routes/auth');
+const contentfulRouter = require('./app/routes/contentful');
+
 const PageIndex = require('./middleware/pageIndex')
 
 const pageIndex = new PageIndex(config)
-
-var NotifyClient = require('notifications-node-client').NotifyClient
+const notify = new NotifyClient(process.env.GOV_NOTIFY_API_KEY);
 
 const app = express();
-const notify = new NotifyClient(process.env.GOV_NOTIFY_API_KEY);
-// const base = new Airtable({ apiKey: process.env.AIRTABLE_TOKEN }).base(process.env.AIRTABLE_BASE_ID);
 
-
+/**
+ * Using express-session middleware for persistent user session. Be sure to
+ * familiarize yourself with available options. Visit: https://www.npmjs.com/package/express-session
+ */
+app.use(session({
+  secret: process.env.EXPRESS_SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+      httpOnly: true,
+      secure: false, // set this to true on production
+  }
+}));
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -54,7 +68,24 @@ var nunjuckEnv = nunjucks.configure(
 nunjuckEnv.addFilter('date', dateFilter)
 markdown.register(nunjuckEnv, marked.parse)
 
-app.use('/', routes)
+function isAuthenticated(req, res, next) {
+
+  // Are we on /auth/signin?
+  if (req.path.startsWith('/auth/')) {
+      return next();
+  }
+
+  if (!req.session.isAuthenticated) {
+      return res.redirect('/auth/signin'); // redirect to sign-in route
+  }
+
+  next();
+};
+
+app.use(isAuthenticated);
+
+app.use('/auth', authRouter)
+app.use('/', contentfulRouter)
 
 // Set up static file serving for the app's assets
 app.use('/assets', express.static('public/assets'))
