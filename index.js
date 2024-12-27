@@ -17,7 +17,7 @@ const { skipAuth } = require('./app/auth-config')
 
 // Middleware
 const { session, isAuthenticated } = require('./app/auth/middleware')
-// To rename, this is not middleware.
+// To rename or remove.
 const PageIndex = require('./middleware/pageIndex')
 
 // Routes

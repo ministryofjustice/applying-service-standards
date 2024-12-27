@@ -82,4 +82,7 @@ In this project, auth is limited to the following files:
 
 The auth middleware is applied to all routes except the auth routes.
 
+For the time being, express-session is used to store the user's session.
+If the production environment is to be scaled horizontally, the session store should be changed to a shared store like Redis.
+
 To turn off auth for an environment, set `OAUTH_SKIP_AUTH` to `true` in the environment variables.
