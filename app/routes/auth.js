@@ -3,41 +3,43 @@
  * Licensed under the MIT License.
  */
 
-var express = require("express");
+var express = require('express')
 
-const authProvider = require("../auth/provider");
+const authProvider = require('../auth/provider')
 const {
   OAUTH_REDIRECT_URI,
   OAUTH_LOGOUT_REDIRECT_URI,
-} = require("../auth-config");
+} = require('../auth-config')
 
-const router = express.Router();
+const router = express.Router()
+
+router.get('/login-screen', authProvider.prompt({}))
 
 router.get(
-  "/signin",
+  '/login',
   authProvider.login({
     scopes: [],
     redirectUri: OAUTH_REDIRECT_URI,
-    successRedirect: "/",
+    successRedirect: '/',
   }),
-);
+)
 
 router.get(
-  "/acquireToken",
+  '/acquireToken',
   authProvider.acquireToken({
-    scopes: ["User.Read"],
+    scopes: ['User.Read'],
     redirectUri: OAUTH_REDIRECT_URI,
-    successRedirect: "/users/profile",
+    successRedirect: '/users/profile',
   }),
-);
+)
 
-router.post("/redirect", authProvider.handleRedirect());
+router.post('/redirect', authProvider.handleRedirect())
 
 router.get(
-  "/signout",
+  '/signout',
   authProvider.logout({
     postLogoutRedirectUri: OAUTH_LOGOUT_REDIRECT_URI,
   }),
-);
+)
 
-module.exports = router;
+module.exports = router

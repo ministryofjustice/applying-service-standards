@@ -1,0 +1,14 @@
+{% extends "layouts/main--logged-out.html" %}
+
+{% set selectedNav = "" %}
+{% set pageName = "Login to access this service" %}
+
+{% block content %}
+
+<h1 class="govuk-heading-l">Login to access this pre-production service</h1>
+
+    <p class="govuk-body">You will be prompted to sign in with your Justice account.</p>
+
+    <a href="/auth/login" class="govuk-button">Login</a>
+
+{% endblock %}

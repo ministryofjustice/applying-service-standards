@@ -3,54 +3,42 @@ const path = require('node:path')
 
 // npm packages
 const express = require('express')
-const session = require('express-session');
 const nunjucks = require('nunjucks')
 const dateFilter = require('nunjucks-date-filter')
 const markdown = require('nunjucks-markdown')
 const marked = require('marked')
 const bodyParser = require('body-parser')
-const favicon = require('serve-favicon');
-const { NotifyClient } = require('notifications-node-client');
-// TODO - use these, or delete and uninstall.
-// const helmet = require('helmet');
-// const Airtable = require('airtable');
+const favicon = require('serve-favicon')
+const { NotifyClient } = require('notifications-node-client')
 
-// Relative
+// Configuration
 const config = require('./app/config')
+const { skipAuth } = require('./app/auth-config')
 
-const authRouter = require('./app/routes/auth');
-const contentfulRouter = require('./app/routes/contentful');
-
+// Middleware
+const { session, isAuthenticated } = require('./app/auth/middleware')
+// To rename, this is not middleware.
 const PageIndex = require('./middleware/pageIndex')
 
+// Routes
+const authRouter = require('./app/routes/auth')
+const contentfulRouter = require('./app/routes/contentful')
+
 const pageIndex = new PageIndex(config)
-const notify = new NotifyClient(process.env.GOV_NOTIFY_API_KEY);
+const notify = new NotifyClient(process.env.GOV_NOTIFY_API_KEY)
 
-const app = express();
+const app = express()
 
-/**
- * Using express-session middleware for persistent user session. Be sure to
- * familiarize yourself with available options. Visit: https://www.npmjs.com/package/express-session
- */
-app.use(session({
-  secret: process.env.EXPRESS_SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-      httpOnly: true,
-      secure: false, // set this to true on production
-  }
-}));
+// Use express-session to manage user sessions - i.e. login via Entra.
+skipAuth || app.use(session)
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(favicon(path.join(__dirname, 'public/assets/images', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public/assets/images', 'favicon.ico')))
 
 app.set('view engine', 'html')
 
 app.locals.serviceName = 'Apply the Service Standard in DfE'
-
-
 
 // Set up Nunjucks as the template engine
 var nunjuckEnv = nunjucks.configure(
@@ -68,34 +56,27 @@ var nunjuckEnv = nunjucks.configure(
 nunjuckEnv.addFilter('date', dateFilter)
 markdown.register(nunjuckEnv, marked.parse)
 
-function isAuthenticated(req, res, next) {
-
-  // Are we on /auth/signin?
-  if (req.path.startsWith('/auth/')) {
-      return next();
-  }
-
-  if (!req.session.isAuthenticated) {
-      return res.redirect('/auth/signin'); // redirect to sign-in route
-  }
-
-  next();
-};
-
-app.use(isAuthenticated);
-
-app.use('/auth', authRouter)
-app.use('/', contentfulRouter)
-
-// Set up static file serving for the app's assets
+// Set up static file serving for the app's assets.
+// Use this before auth middleware, so that the assets can be served on the login screen.
 app.use('/assets', express.static('public/assets'))
+
+// Also, define robots.txt route before auth middleware.
+app.get('/robots.txt', (_, res) => {
+  res.type('text/plain')
+  return res.send(`User-agent: *\nDisallow: ${config.allowRobots ? '' : '/'}`)
+})
+
+// Add the middleware and routes for auth.
+skipAuth || app.use(isAuthenticated)
+skipAuth || app.use('/auth', authRouter)
+
+app.use('/', contentfulRouter)
 
 // Render sitemap.xml in XML format
 app.get('/sitemap.xml', (_, res) => {
-  res.set({ 'Content-Type': 'application/xml' });
-  res.render('sitemap.xml');
-});
-
+  res.set({ 'Content-Type': 'application/xml' })
+  res.render('sitemap.xml')
+})
 
 app.get('/search', (req, res) => {
   console.log(req.query['searchterm'])
@@ -144,36 +125,34 @@ app.post('/submit-feedback', (req, res) => {
       personalisation: {
         feedback: feedback,
         page: fullUrl,
-        service: "Apply Service Standard in Justice Digital"
+        service: 'Apply Service Standard in Justice Digital',
       },
     })
-    .then((response) => { })
+    .then((response) => {})
     .catch((err) => console.log(err))
 
   return res.sendStatus(200)
 })
 
-
 app.get('/service-standard', (req, res) => {
   return res.redirect('/')
 })
 
-
 // Route for handling Yes/No feedback submissions
 app.post('/form-response/helpful', (req, res) => {
-  const { response } = req.body;
-  const service = "Apply the service standard";
-  const pageURL = req.headers.referer || 'Unknown';
-  const date = new Date().toISOString();
+  const { response } = req.body
+  const service = 'Apply the service standard'
+  const pageURL = req.headers.referer || 'Unknown'
+  const date = new Date().toISOString()
 
   // TODO: For now, log the submitted data, but later, write code to store it.
   console.log('Data', {
-    "Response": response,
-    "Service": service,
-    "URL": pageURL
-  });
+    Response: response,
+    Service: service,
+    URL: pageURL,
+  })
 
-  res.json({ success: true, message: 'Feedback submitted successfully' });
+  res.json({ success: true, message: 'Feedback submitted successfully' })
 
   // base('Data').create([
   //   {
@@ -190,24 +169,24 @@ app.post('/form-response/helpful', (req, res) => {
   //   }
   //   res.json({ success: true, message: 'Feedback submitted successfully' });
   // });
-});
+})
 
 // New route for handling detailed feedback submissions
 app.post('/form-response/feedback', (req, res) => {
-  const { response } = req.body;
+  const { response } = req.body
 
-  const service = "Apply the service standard"; // Example service name
-  const pageURL = req.headers.referer || 'Unknown'; // Attempt to capture the referrer URL
-  const date = new Date().toISOString();
+  const service = 'Apply the service standard' // Example service name
+  const pageURL = req.headers.referer || 'Unknown' // Attempt to capture the referrer URL
+  const date = new Date().toISOString()
 
   // TODO: For now, log the submitted data, but later, write code to store it.
   console.log('Feedback', {
-      "Feedback": response,
-      "Service": service,
-      "URL": pageURL
-  });
+    Feedback: response,
+    Service: service,
+    URL: pageURL,
+  })
 
-  res.json({ success: true, message: 'Feedback submitted successfully' });
+  res.json({ success: true, message: 'Feedback submitted successfully' })
 
   // base('Feedback').create([{
   //   "fields": {
@@ -222,7 +201,7 @@ app.post('/form-response/feedback', (req, res) => {
   //   }
   //   res.json({ success: true, message: 'Feedback submitted successfully' });
   // });
-});
+})
 
 app.get(/\.html?$/i, function (req, res) {
   var path = req.path
