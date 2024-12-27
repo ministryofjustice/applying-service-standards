@@ -60,3 +60,26 @@ BrowserSync UI<br>
 
 The oauth2 flow should now work with the Azure AD/Entra ID application.
 You can get an Access Token, Refresh Token and an expiry of the token.
+
+### Auth in this codebase
+
+The implementation of Entra ID in this codebase is based on the tutorial 
+[Sign in users and acquire a token for Microsoft Graph in a Node.js & Express web app](https://learn.microsoft.com/en-us/entra/identity-platform/tutorial-v2-nodejs-webapp-msal).
+
+Having followed the tutorial, some changes were made to the file names to match the project structure.
+
+In this project, auth is limited to the following files:
+
+- `.env` - where the environment variables are defined.
+- `index.js` - where auth middleware is applied and routes are mounted.
+- `app/auth/middleware` - where the auth middleware is defined.
+- `app/auth/provider.js` - where the auth provider is defined.
+- `app/routes/auth.js` - where the auth routes are defined.
+- `app/views/login-screen.html` - where the login screen is defined.
+- `app/views/layouts/main--logged-out.html` - where the layout for the logged out state is defined.
+- `app/views/layouts/_header--logged-out.html` - where a stripped down header for the logged out state is defined.
+- `app/views/layouts/_footer--logged-out.html` - where a stripped down footer for the logged out state is defined.
+
+The auth middleware is applied to all routes except the auth routes.
+
+To turn off auth for an environment, set `OAUTH_SKIP_AUTH` to `true` in the environment variables.
