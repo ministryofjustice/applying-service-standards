@@ -126,7 +126,12 @@ class AuthProvider {
           this.cryptoProvider.base64Decode(req.body.state),
         )
 
-        res.redirect(`${baseURL}${state.successRedirect.startsWith('/') ? state.successRedirect : ''}`)
+        // Ensure we're not redirecting to an arbitrary URL
+        const redirectUri = state.successRedirect.startsWith('/')
+          ? state.successRedirect
+          : ''
+
+        res.redirect(`${baseURL}${redirectUri}`)
       } catch (error) {
         next(error)
       }
