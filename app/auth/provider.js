@@ -1,6 +1,7 @@
 const msal = require('@azure/msal-node')
 const axios = require('axios')
 
+const { baseUrl } = require('../config')
 const { msalConfig } = require('../auth-config')
 
 class AuthProvider {
@@ -92,50 +93,6 @@ class AuthProvider {
     }
   }
 
-  acquireToken(options = {}) {
-    return async (req, res, next) => {
-      try {
-        const msalInstance = this.getMsalInstance(this.msalConfig)
-
-        /**
-         * If a token cache exists in the session, deserialize it and set it as the
-         * cache for the new MSAL CCA instance. For more, see:
-         * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-node/docs/caching.md
-         */
-        if (req.session.tokenCache) {
-          msalInstance.getTokenCache().deserialize(req.session.tokenCache)
-        }
-
-        const tokenResponse = await msalInstance.acquireTokenSilent({
-          account: req.session.account,
-          scopes: options.scopes || [],
-        })
-
-        /**
-         * On successful token acquisition, write the updated token
-         * cache back to the session. For more, see:
-         * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-node/docs/caching.md
-         */
-        req.session.tokenCache = msalInstance.getTokenCache().serialize()
-        req.session.accessToken = tokenResponse.accessToken
-        req.session.idToken = tokenResponse.idToken
-        req.session.account = tokenResponse.account
-
-        res.redirect(options.successRedirect)
-      } catch (error) {
-        if (error instanceof msal.InteractionRequiredAuthError) {
-          return this.login({
-            scopes: options.scopes || [],
-            redirectUri: options.redirectUri,
-            successRedirect: options.successRedirect || '/',
-          })(req, res, next)
-        }
-
-        next(error)
-      }
-    }
-  }
-
   handleRedirect(options = {}) {
     return async (req, res, next) => {
       if (!req.body || !req.body.state) {
@@ -168,7 +125,12 @@ class AuthProvider {
         const state = JSON.parse(
           this.cryptoProvider.base64Decode(req.body.state),
         )
-        res.redirect(state.successRedirect)
+
+        if (new URL(baseUrl).host === new URL(state.successRedirect).host) {
+          return res.redirect(state.successRedirect)
+        }
+
+        res.redirect(baseUrl)
       } catch (error) {
         next(error)
       }

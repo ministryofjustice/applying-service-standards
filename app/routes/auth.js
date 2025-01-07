@@ -24,15 +24,6 @@ router.get(
   }),
 )
 
-router.get(
-  '/acquireToken',
-  authProvider.acquireToken({
-    scopes: ['User.Read'],
-    redirectUri: OAUTH_REDIRECT_URI,
-    successRedirect: '/users/profile',
-  }),
-)
-
 router.post('/redirect', authProvider.handleRedirect())
 
 router.get(
