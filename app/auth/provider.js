@@ -1,7 +1,7 @@
 const msal = require('@azure/msal-node')
 const axios = require('axios')
 
-const { baseUrl } = require('../config')
+const { baseURL } = require('../config')
 const { msalConfig } = require('../auth-config')
 
 class AuthProvider {
@@ -126,11 +126,7 @@ class AuthProvider {
           this.cryptoProvider.base64Decode(req.body.state),
         )
 
-        if (new URL(baseUrl).host === new URL(state.successRedirect).host) {
-          return res.redirect(state.successRedirect)
-        }
-
-        res.redirect(baseUrl)
+        res.redirect(`${baseURL}${state.successRedirect}`)
       } catch (error) {
         next(error)
       }
