@@ -1,0 +1,41 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: applying-service-standards-staging-ingress
+  namespace: applying-service-standards-staging
+  annotations:
+    external-dns.alpha.kubernetes.io/set-identifier: applying-service-standards-staging-ingress-applying-service-standards-staging-green
+    external-dns.alpha.kubernetes.io/aws-weight: "100"
+    nginx.ingress.kubernetes.io/enable-modsecurity: "true"
+    nginx.ingress.kubernetes.io/modsecurity-snippet: |
+      SecAuditEngine On
+      SecRuleEngine DetectionOnly
+      SecDefaultAction "phase:2,pass,log,tag:github_team=central-digital-product-team,tag:namespace=applying-service-standards-staging"
+    nginx.ingress.kubernetes.io/server-snippet: |
+      location = /health {
+        auth_basic off;
+        access_log off;
+        default_type text/plain;
+        add_header Content-Type text/plain;
+        return 200 "OK";
+      }
+      location = /.well-known/security.txt {
+        auth_basic off;
+        return 301 https://raw.githubusercontent.com/ministryofjustice/security-guidance/main/contact/vulnerability-disclosure-security.txt;
+      }
+spec:
+  ingressClassName: modsec
+  tls:
+  - hosts:
+    - staging-applying-service-standards.apps.live.cloud-platform.service.justice.gov.uk
+  rules:
+  - host: staging-applying-service-standards.apps.live.cloud-platform.service.justice.gov.uk
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: node-service
+            port:
+              number: 3052

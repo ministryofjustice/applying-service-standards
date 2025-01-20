@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: applying-service-standards-staging
+  namespace: applying-service-standards-staging
+data:
+  ENV: "staging"
+  BASE_URL: "https://staging-applying-service-standards.apps.live.cloud-platform.service.justice.gov.uk"
+  FEEDBACK_TEMPLATE_ID: "notify_feedback_template"
+  # See Azure Setup for more information on how to get these values.
+  # The following IDs are not private, they form part of the publicly visible oauth login url.
+  OAUTH_CLIENT_ID: "efc3d5de-4f3c-42c3-87ec-04a1f98578b9"
+  OAUTH_TENANT_ID: "c6874728-71e6-41fe-a9e1-2e8c36776ad8"
