@@ -28,25 +28,11 @@ jobs:
           ECR_URL: ${{ inputs.registry }}/${{ vars.ECR_REPOSITORY }}
           IMAGE_TAG: "node-${{ github.sha }}"
           GOV_NOTIFY_API_KEY: ${{ secrets.GOV_NOTIFY_API_KEY }}
-          BASIC_AUTH_USER: ${{ secrets.BASIC_AUTH_USER }}
-          BASIC_AUTH_PASS: ${{ secrets.BASIC_AUTH_PASS }}
+          CONTENTFUL_SPACE_ID: ${{ secrets.CONTENTFUL_SPACE_ID }}
+          CONTENTFUL_DELIVERY_API_TOKEN: ${{ secrets.CONTENTFUL_DELIVERY_API_TOKEN }}
+          EXPRESS_SESSION_SECRET: ${{ secrets.EXPRESS_SESSION_SECRET }}
+          OAUTH_CLIENT_SECRET: ${{ secrets.OAUTH_CLIENT_SECRET }}
         run: |
-          ## - - - - - - - - - -
-          ## Basic Auth  - - - -
-          ## - - - - - - - - - -
-
-          BASIC_AUTH_BASE64=""
-          
-          ## Prevent errors when basic auth isn't used
-          ## Nb.the BASIC_AUTH_USER secret in GH production environment should
-          ## be set to `no-basic-auth` if not being used
-          
-          if [ "$BASIC_AUTH_USER" != "no-basic-auth" ]; then
-            BASIC_AUTH_BASE64=$(htpasswd -nbm "$BASIC_AUTH_USER" "$BASIC_AUTH_PASS" | base64 -w 0)
-          fi
-          
-          export BASIC_AUTH_BASE64
-
           ## - - - - - - - - - - -
           ## Perform find/replace
           ## - - - - - - - - - - -
