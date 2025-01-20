@@ -4,7 +4,11 @@ const { RedisStore } = require('connect-redis')
 
 const redisClient = new IORedis({
   host: process.env.REDIS_HOST || 'redis',
-  ...(process.env.REDIS_PASSWORD && { password: process.env.REDIS_PASSWORD }),
+  // Settings for AWS Elasticache.
+  ...(process.env.REDIS_PASSWORD && {
+    password: process.env.REDIS_PASSWORD,
+    tls: {},
+  }),
 })
 
 const redisStore = new RedisStore({ client: redisClient })
