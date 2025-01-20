@@ -1,6 +1,16 @@
 const expressSession = require('express-session')
+const IORedis = require('ioredis')
+const { RedisStore } = require('connect-redis')
+
+const redisClient = new IORedis({
+  host: process.env.REDIS_HOST || 'redis',
+  ...(process.env.REDIS_PASSWORD && { password: process.env.REDIS_PASSWORD }),
+})
+
+const redisStore = new RedisStore({ client: redisClient })
 
 const session = expressSession({
+  store: redisStore,
   secret: process.env.EXPRESS_SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
