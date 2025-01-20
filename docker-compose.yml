@@ -25,3 +25,9 @@ services:
       - "3052:3052"
       - "3000:3000"
       - "3001:3001"
+
+  redis:
+    container_name: standards-redis
+    image: 'bitnami/redis:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes

@@ -37,6 +37,17 @@ spec:
               name: http
           securityContext:
             runAsUser: 1000
+          env:
+            - name: REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: elasticache-output
+                  key: primary_endpoint_address
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: elasticache-output
+                  key: auth_token
           envFrom:
             - configMapRef:
                 name: ${KUBE_NAMESPACE}
