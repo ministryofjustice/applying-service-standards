@@ -11,7 +11,9 @@ module.exports = {
   githubrepo: 'https://github.com/DFE-Digital/apply-the-service-standard-in-dfe',
   
   // TODO: consider removing this as I can't see a reference to it in the codebase.
-  assetPath: "/home/node/",
+  assetPath: '/home/node/',
+
+  allowRobots: process.env.ROBOTS_ALLOW === 'true',
 
   // AIRTABLE_API_KEY: process.env.AIRTABLE_API_KEY,
   // airtableFeedbackBase: process.env.AIRTABLE_FEATURE_BASE_URL
