@@ -10,3 +10,9 @@ services:
       - NODE_ENV=production
     ports:
       - "3052:3052"
+
+  redis:
+    container_name: standards-redis
+    image: 'bitnami/redis:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes

@@ -29,6 +29,9 @@ const notify = new NotifyClient(process.env.GOV_NOTIFY_API_KEY)
 
 const app = express()
 
+// Trust the first proxy (Cloud Platform) to report the correct IP address. Used for to auth middleware.
+skipAuth || app.set('trust proxy', 1);
+
 // Use express-session to manage user sessions - i.e. login via Entra.
 skipAuth || app.use(session)
 
