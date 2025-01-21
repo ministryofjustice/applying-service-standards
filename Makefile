@@ -67,7 +67,7 @@ build-prod:
 run-prod: up-prod
 
 up-prod:
-	docker compose -f docker-compose.prod.yml  up
+	docker compose -f docker-compose.prod.yml up
 
 
 #   █▄▀  █░█  █▄▄  █▀▀  █▀█  █▄░█  █▀▀  ▀█▀  █▀▀  █▀
