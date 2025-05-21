@@ -5,7 +5,6 @@ const rename = require('gulp-rename')
 const replace = require('gulp-replace')
 const sass = require('gulp-sass')(require('sass'))
 const uglify = require('gulp-uglify')
-const webp = require('gulp-webp')
 const browserSync = require('browser-sync').create()
 
 // Set up a task to process SCSS files
@@ -67,13 +66,6 @@ gulp.task('process-files', async function () {
     .pipe(gulp.dest('public/assets/files'))
 })
 
-gulp.task('process-images', async function () {
-  return gulp
-    .src('app/assets/images/**/*.png', {encoding: false})
-    .pipe(webp())
-    .pipe(gulp.dest('public/assets/images'))
-})
-
 gulp.task('nunjucksRender', function () {
   return gulp
     .src('app/views/**/*.html')
@@ -97,7 +89,6 @@ gulp.task('watch', function () {
 
   gulp.watch('app/assets/scss/**/*.scss', gulp.series('process-scss'))
   gulp.watch('app/assets/js/**/*.js', gulp.series('process-js'))
-  gulp.watch('app/assets/images/**/*.png', gulp.series('process-images'))
   gulp.watch('app/assets/images/**/*', gulp.series('process-images-copy'))
   gulp.watch(
     'node_modules/dfe-frontend/packages/assets/**/*.{jpg,jpeg,png,gif,svg}',
@@ -120,7 +111,6 @@ gulp.task(
     'process-files',
     'process-js',
     'process-images-copy',
-    /*'process-images',*/
   ),
 )
 
