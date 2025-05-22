@@ -3,6 +3,7 @@ const path = require('node:path')
 
 // npm packages
 const express = require('express')
+const helmet = require('helmet')
 const nunjucks = require('nunjucks')
 const dateFilter = require('nunjucks-date-filter')
 const markdown = require('nunjucks-markdown')
@@ -19,6 +20,8 @@ const { skipAuth } = require('./app/auth-config')
 const { session, isAuthenticated } = require('./app/auth/middleware')
 // To rename or remove.
 const PageIndex = require('./middleware/pageIndex')
+// Request validation
+const { validatePath } = require('./middleware/request-validation')
 
 // Routes
 const authRouter = require('./app/routes/auth')
@@ -28,6 +31,10 @@ const pageIndex = new PageIndex(config)
 const notify = new NotifyClient(process.env.GOV_NOTIFY_API_KEY)
 
 const app = express()
+
+app.use(helmet())
+
+app.use(validatePath)
 
 // Trust the first proxy (Cloud Platform) to report the correct IP address. Used for to auth middleware.
 skipAuth || app.set('trust proxy', 1);
@@ -204,14 +211,6 @@ app.post('/form-response/feedback', (req, res) => {
   //   }
   //   res.json({ success: true, message: 'Feedback submitted successfully' });
   // });
-})
-
-app.get(/\.html?$/i, function (req, res) {
-  var path = req.path
-  var parts = path.split('.')
-  parts.pop()
-  path = parts.join('.')
-  res.redirect(path)
 })
 
 app.get(/^([^.]+)$/, function (req, res, next) {

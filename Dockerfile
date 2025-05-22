@@ -1,6 +1,6 @@
 # Create a NodeJS base image with the codebase.
 # The image is used for development and production.
-FROM node:20-alpine AS base-node
+FROM node:23-alpine AS base-node
 
 # Set the environment to development, as we will install
 # npm development dependencies in both child images.
