@@ -218,7 +218,7 @@ app.get(/\.html?$/i, function (req, res) {
   var parts = path.split('.')
   parts.pop()
   path = parts.join('.')
-  res.redirect(path)
+  res.redirect(`${process.env.BASE_URL}${path}` )
 })
 
 app.get(/^([^.]+)$/, function (req, res, next) {
