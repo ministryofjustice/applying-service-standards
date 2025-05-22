@@ -3,6 +3,7 @@ const path = require('node:path')
 
 // npm packages
 const express = require('express')
+const helmet = require('helmet')
 const nunjucks = require('nunjucks')
 const dateFilter = require('nunjucks-date-filter')
 const markdown = require('nunjucks-markdown')
@@ -28,6 +29,8 @@ const pageIndex = new PageIndex(config)
 const notify = new NotifyClient(process.env.GOV_NOTIFY_API_KEY)
 
 const app = express()
+
+app.use(helmet())
 
 // Trust the first proxy (Cloud Platform) to report the correct IP address. Used for to auth middleware.
 skipAuth || app.set('trust proxy', 1);
