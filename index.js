@@ -20,6 +20,8 @@ const { skipAuth } = require('./app/auth-config')
 const { session, isAuthenticated } = require('./app/auth/middleware')
 // To rename or remove.
 const PageIndex = require('./middleware/pageIndex')
+// Request validation
+const { validatePath } = require('./middleware/request-validation')
 
 // Routes
 const authRouter = require('./app/routes/auth')
@@ -31,6 +33,8 @@ const notify = new NotifyClient(process.env.GOV_NOTIFY_API_KEY)
 const app = express()
 
 app.use(helmet())
+
+app.use(validatePath)
 
 // Trust the first proxy (Cloud Platform) to report the correct IP address. Used for to auth middleware.
 skipAuth || app.set('trust proxy', 1);
