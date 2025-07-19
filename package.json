@@ -22,7 +22,7 @@
     "axios": "^1.9.0",
     "body-parser": "^1.20.3",
     "cheerio": "^1.0.0",
-    "connect-redis": "^8.0.1",
+    "connect-redis": "^8.1.0",
     "contentful": "^10.15.1",
     "dfe-frontend": "^2.0.1",
     "express": "^4.21.2",
