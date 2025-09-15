@@ -1,5 +1,4 @@
 const msal = require('@azure/msal-node')
-const axios = require('axios')
 
 const { baseURL } = require('../config')
 const { msalConfig } = require('../auth-config')
@@ -225,21 +224,18 @@ class AuthProvider {
    * @returns
    */
   async getCloudDiscoveryMetadata(authority) {
-    const endpoint =
-      'https://login.microsoftonline.com/common/discovery/instance'
+    const endpoint = 'https://login.microsoftonline.com/common/discovery/instance'
+
+    const params = `api-version=1.1&authorization_endpoint=${encodeURIComponent(`${authority}/oauth2/v2.0/authorize`)}`
 
     try {
-      const response = await axios.get(endpoint, {
-        params: {
-          'api-version': '1.1',
-          authorization_endpoint: `${authority}/oauth2/v2.0/authorize`,
-        },
-      })
+      const response = await fetch(`${endpoint}?${params}`)
 
-      return await response.data
+      return await response.json()
     } catch (error) {
-      throw error
+      console.log(error)
     }
+    return {}
   }
 
   /**
@@ -250,11 +246,13 @@ class AuthProvider {
     const endpoint = `${authority}/v2.0/.well-known/openid-configuration`
 
     try {
-      const response = await axios.get(endpoint)
-      return await response.data
+      const response = await fetch(endpoint)
+
+      return await response.json()
     } catch (error) {
       console.log(error)
     }
+    return {}
   }
 }
 
