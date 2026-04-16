@@ -18,35 +18,35 @@
   "license": "MIT",
   "dependencies": {
     "@azure/msal-node": "^2.16.2",
-    "@contentful/rich-text-html-renderer": "^17.0.0",
-    "axios": "^1.12.1",
-    "body-parser": "^1.20.3",
-    "cheerio": "^1.0.0",
+    "@contentful/rich-text-html-renderer": "^17.2.2",
+    "axios": "^1.15.0",
+    "body-parser": "^2.2.2",
+    "cheerio": "^1.2.0",
     "connect-redis": "^8.0.1",
     "contentful": "^10.15.1",
     "dfe-frontend": "^2.0.1",
     "express": "^4.21.2",
-    "express-session": "^1.18.2",
+    "express-session": "^1.19.0",
     "govuk-frontend": "^5.2.0",
     "helmet": "^6.1.5",
-    "ioredis": "^5.4.2",
+    "ioredis": "^5.10.1",
     "lunr": "^2.3.9",
     "marked": "^4.3.0",
     "notifications-node-client": "^7.0.0",
     "nunjucks": "^3.2.4",
     "nunjucks-date-filter": "^0.1.1",
     "nunjucks-markdown": "^2.0.1",
-    "serve-favicon": "^2.5.0"
+    "serve-favicon": "^2.5.1"
   },
   "devDependencies": {
-    "browser-sync": "^3.0.3",
-    "gulp": "^5.0.0",
+    "browser-sync": "^3.0.4",
+    "gulp": "^5.0.1",
     "gulp-clean-css": "^4.3.0",
     "gulp-copy": "^5.0.0",
-    "gulp-rename": "^2.0.0",
+    "gulp-rename": "^2.1.0",
     "gulp-replace": "^1.1.4",
     "gulp-sass": "^5.1.0",
     "gulp-uglify": "^3.0.2",
-    "sass": "^1.76.0"
+    "sass": "^1.99.0"
   }
 }
