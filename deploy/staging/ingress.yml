@@ -36,6 +36,10 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: node-service
+            # The service name includes "-disabled" to prevent the ingress
+            # from routing traffic to the service until the deployment is ready.
+            # Rename to "node-service" when ready, and the ingress
+            # will route traffic to it.
+            name: node-service-disabled
             port:
               number: 3052
