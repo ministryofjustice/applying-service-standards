@@ -270,6 +270,9 @@ matchRoutes = function (req, res, next) {
   renderPath(path, res, next)
 }
 
-// Start the server
-// Run application on configured port
-app.listen(config.port)
+// Start the server when run directly (not when required for testing)
+if (require.main === module) {
+  app.listen(config.port)
+}
+
+module.exports = app

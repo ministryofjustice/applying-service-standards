@@ -304,3 +304,10 @@ exports.g_page = async function (req, res) {
         res.status(500).send('An error occurred while fetching the data.')
     }
 }
+
+// Export utility functions for testing
+exports.cleanUpHtml = cleanUpHtml
+exports.convertFilesize = convertFilesize
+exports.getExtension = getExtension
+exports.getLinkedContent = getLinkedContent
+exports.getSidebarNavigation = getSidebarNavigation

@@ -8,7 +8,8 @@
     "watch": "gulp default & nodemon index.js",
     "build": "gulp build",
     "start": "node app/index.js",
-    "dev": "npm run watch"
+    "dev": "npm run watch",
+    "test": "vitest --run"
   },
   "nodemonConfig": {
     "ext": "html"
@@ -40,6 +41,7 @@
   },
   "devDependencies": {
     "browser-sync": "^3.0.4",
+    "fast-check": "4.8.0",
     "gulp": "^5.0.1",
     "gulp-clean-css": "^4.3.0",
     "gulp-copy": "^5.0.0",
@@ -47,6 +49,8 @@
     "gulp-replace": "^1.1.4",
     "gulp-sass": "^5.1.0",
     "gulp-uglify": "^3.0.2",
-    "sass": "^1.99.0"
+    "sass": "^1.99.0",
+    "supertest": "7.2.2",
+    "vitest": "4.1.9"
   }
 }
