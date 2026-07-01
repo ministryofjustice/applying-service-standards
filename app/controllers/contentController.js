@@ -269,6 +269,11 @@ exports.g_home = async function (req, res) {
  */
 exports.g_page = async function (req, res) {
     const {slug} = req.params;
+
+    if (!slug || slug.length > 100) {
+        return res.status(400).send('Invalid request');
+    }
+
     // General
     let contentType = ''
     let mainContent = [];

@@ -721,7 +721,7 @@ window.dataLayer = window.dataLayer || [];
         userPreferences: {
           cookieName: "cookie-preferences",
           cookieExpiry: 365,
-          cookieSecure: !1
+          cookieSecure: "undefined" != typeof window && window.location.protocol === "https:"
         },
         preferencesForm: {
           class: "cookie-preferences-form"
@@ -825,7 +825,7 @@ var config = {
   userPreferences: {
     cookieName: 'cookie-preferences',
     cookieExpiry: 365,
-    cookieSecure: false
+    cookieSecure: window.location.protocol === 'https:'
   },
   preferencesForm: {
     class: 'cookie-preferences-form'

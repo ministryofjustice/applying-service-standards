@@ -19,6 +19,10 @@ exports.g_home = async function (req, res) {
 exports.g_standard = async function (req, res) {
     const { slug } = req.params;
 
+    if (!slug || slug.length > 100) {
+        return res.status(400).send('Invalid request');
+    }
+
     // Split the standard into its parts, get the number before the first hyphen
     const standardParts = slug.split('-');
     const standardNumber = standardParts[0];
@@ -53,6 +57,11 @@ exports.g_standard = async function (req, res) {
 
 exports.g_phase = async function (req, res) {
     const { phase } = req.params;
+
+    if (!phase || phase.length > 100) {
+        return res.status(400).send('Invalid request');
+    }
+
     const standards = require('../data/content.json');
 
     let matchedPhases = [];

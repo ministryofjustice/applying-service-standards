@@ -24,6 +24,10 @@ function getUrlFromSlug(slug, parent) {
 exports.g_search = async function (req, res) {
     const { searchterm } = req.query;
 
+    if (searchterm && searchterm.length > 200) {
+        return res.status(400).send('Search term too long');
+    }
+
     try {
         const entries = await client.getEntries({
             query: searchterm,
