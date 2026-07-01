@@ -54,7 +54,7 @@ app.use(favicon(path.join(__dirname, 'public/assets/images', 'favicon.ico')))
 
 app.set('view engine', 'html')
 
-app.locals.serviceName = 'Apply the Service Standard in JDDS'
+app.locals.serviceName = 'Apply the Service Standard in MoJ'
 
 // Set up Nunjucks as the template engine
 var nunjuckEnv = nunjucks.configure(
