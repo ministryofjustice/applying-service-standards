@@ -1,10 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 $govuk-font-family: 'Inter', sans-serif;
-$govuk-new-link-styles: true;
 $govuk-global-styles: true;
 
-@import 'govuk-frontend/dist/govuk/all';
+@import 'govuk-frontend/dist/govuk/index.import';
 @import 'dfe-frontend/packages/dfefrontend';
 
 @import './_hero.scss';

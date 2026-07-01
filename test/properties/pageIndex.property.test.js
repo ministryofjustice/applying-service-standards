@@ -108,8 +108,9 @@ describe('Property 7: Heading extraction scoping', () => {
         // Each result must match the trimmed inside heading text
         const matches = result.every((heading, i) => heading === insideHeadings[i].trim())
 
-        // No outside-only heading should appear in the results
-        const outsideOnly = outsideHeadings.filter((h) => !insideHeadings.includes(h))
+        // No outside-only heading should appear in the results (compare trimmed values)
+        const trimmedInsideHeadings = insideHeadings.map((h) => h.trim())
+        const outsideOnly = outsideHeadings.filter((h) => !trimmedInsideHeadings.includes(h.trim()))
         const noOutside = outsideOnly.every((h) => !result.includes(h.trim()))
 
         return matches && noOutside

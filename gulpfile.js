@@ -12,8 +12,8 @@ gulp.task('process-scss', function () {
   return gulp
     .src('app/assets/scss/**/*.scss')
     .pipe(sass({ 
-      quietDeps: true, 
-      includePaths: ['node_modules']
+      silenceDeprecations: ['import'],
+      loadPaths: ['node_modules']
     }).on('error', sass.logError))
     .pipe(cleanCSS())
     .pipe(rename({ suffix: '.min' }))

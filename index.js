@@ -8,7 +8,6 @@ const nunjucks = require('nunjucks')
 const dateFilter = require('nunjucks-date-filter')
 const markdown = require('nunjucks-markdown')
 const marked = require('marked')
-const bodyParser = require('body-parser')
 const favicon = require('serve-favicon')
 const { NotifyClient } = require('notifications-node-client')
 
@@ -28,7 +27,14 @@ const authRouter = require('./app/routes/auth')
 const contentfulRouter = require('./app/routes/contentful')
 
 const pageIndex = new PageIndex(config)
-const notify = new NotifyClient(process.env.GOV_NOTIFY_API_KEY)
+
+let _notify
+function getNotifyClient() {
+  if (!_notify) {
+    _notify = new NotifyClient(process.env.GOV_NOTIFY_API_KEY)
+  }
+  return _notify
+}
 
 const app = express()
 
@@ -42,8 +48,8 @@ skipAuth || app.set('trust proxy', 1);
 // Use express-session to manage user sessions - i.e. login via Entra.
 skipAuth || app.use(session)
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 app.use(favicon(path.join(__dirname, 'public/assets/images', 'favicon.ico')))
 
 app.set('view engine', 'html')
@@ -130,7 +136,7 @@ app.post('/submit-feedback', (req, res) => {
   //Send to notify after validation with recaptcha first
   //TODO: Implement recaptcha
 
-  notify
+  getNotifyClient()
     .sendEmail(process.env.FEEDBACK_TEMPLATE_ID, 'cdpt@justice.gov.uk', {
       personalisation: {
         feedback: feedback,
