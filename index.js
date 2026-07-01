@@ -48,8 +48,8 @@ skipAuth || app.set('trust proxy', 1);
 // Use express-session to manage user sessions - i.e. login via Entra.
 skipAuth || app.use(session)
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.json({ limit: '10kb' }))
+app.use(express.urlencoded({ extended: true, limit: '10kb' }))
 app.use(favicon(path.join(__dirname, 'public/assets/images', 'favicon.ico')))
 
 app.set('view engine', 'html')
@@ -87,7 +87,7 @@ skipAuth || app.use(isAuthenticated)
 skipAuth || app.use('/auth', authRouter)
 
 // Serve static template pages before Contentful router to avoid slug lookup
-app.get('/site-map', (req, res) => {
+app.get('/site-map', (_req, res) => {
   res.render('site-map.html')
 })
 
@@ -102,20 +102,21 @@ app.get('/sitemap.xml', (_, res) => {
 app.get('/search', (req, res) => {
   const query = req.query['searchterm'] || ''
 
-  if (query.length > 200) {
-    return res.status(400).send('Search term too long')
+  if (typeof query !== 'string' || query.length > 200) {
+    return res.status(400).send('Invalid search term')
   }
 
   const resultsPerPage = 10
   let currentPage = parseInt(req.query.page, 10)
+
+  if (!Number.isInteger(currentPage) || currentPage < 1) {
+    currentPage = 1
+  }
+
   const results = pageIndex.search(query)
-  console.log('Results: ' + results)
-  console.log('Query: ' + query)
 
   const maxPage = Math.ceil(results.length / resultsPerPage)
-  if (!Number.isInteger(currentPage)) {
-    currentPage = 1
-  } else if (currentPage > maxPage || currentPage < 1) {
+  if (currentPage > maxPage) {
     currentPage = 1
   }
 
@@ -140,8 +141,9 @@ app.post('/submit-feedback', (req, res) => {
   const feedback = req.body.feedback_form_input
   const fullUrl = req.headers.referer || 'Unknown'
 
-  //Send to notify after validation with recaptcha first
-  //TODO: Implement recaptcha
+  if (!feedback || typeof feedback !== 'string' || feedback.length > 2000) {
+    return res.status(400).send('Invalid feedback')
+  }
 
   getNotifyClient()
     .sendEmail(process.env.FEEDBACK_TEMPLATE_ID, 'cdpt@justice.gov.uk', {
@@ -151,24 +153,27 @@ app.post('/submit-feedback', (req, res) => {
         service: 'Apply Service Standard in Ministry of Justice',
       },
     })
-    .then((response) => {})
-    .catch((err) => console.log(err))
+    .then(() => {})
+    .catch((err) => console.error(err))
 
   return res.sendStatus(200)
 })
 
-app.get('/service-standard', (req, res) => {
+app.get('/service-standard', (_req, res) => {
   return res.redirect('/')
 })
 
 // Route for handling Yes/No feedback submissions
 app.post('/form-response/helpful', (req, res) => {
   const { response } = req.body
+
+  if (!response || typeof response !== 'string' || response.length > 500) {
+    return res.status(400).json({ success: false, message: 'Invalid response' })
+  }
+
   const service = 'Apply the service standard'
   const pageURL = req.headers.referer || 'Unknown'
-  const date = new Date().toISOString()
 
-  // TODO: For now, log the submitted data, but later, write code to store it.
   console.log('Data', {
     Response: response,
     Service: service,
@@ -176,33 +181,19 @@ app.post('/form-response/helpful', (req, res) => {
   })
 
   res.json({ success: true, message: 'Feedback submitted successfully' })
-
-  // base('Data').create([
-  //   {
-  //     "fields": {
-  //       "Response": response,
-  //       "Service": service,
-  //       "URL": pageURL
-  //     }
-  //   }
-  // ], function (err) {
-  //   if (err) {
-  //     console.error(err);
-  //     return res.status(500).send('Error saving to Airtable');
-  //   }
-  //   res.json({ success: true, message: 'Feedback submitted successfully' });
-  // });
 })
 
 // New route for handling detailed feedback submissions
 app.post('/form-response/feedback', (req, res) => {
   const { response } = req.body
 
-  const service = 'Apply the service standard' // Example service name
-  const pageURL = req.headers.referer || 'Unknown' // Attempt to capture the referrer URL
-  const date = new Date().toISOString()
+  if (!response || typeof response !== 'string' || response.length > 2000) {
+    return res.status(400).json({ success: false, message: 'Invalid feedback' })
+  }
 
-  // TODO: For now, log the submitted data, but later, write code to store it.
+  const service = 'Apply the service standard'
+  const pageURL = req.headers.referer || 'Unknown'
+
   console.log('Feedback', {
     Feedback: response,
     Service: service,
@@ -210,20 +201,6 @@ app.post('/form-response/feedback', (req, res) => {
   })
 
   res.json({ success: true, message: 'Feedback submitted successfully' })
-
-  // base('Feedback').create([{
-  //   "fields": {
-  //     "Feedback": response,
-  //     "Service": service,
-  //     "URL": pageURL
-  //   }
-  // }], function (err) {
-  //   if (err) {
-  //     console.error(err);
-  //     return res.status(500).send('Error saving to Airtable');
-  //   }
-  //   res.json({ success: true, message: 'Feedback submitted successfully' });
-  // });
 })
 
 app.get(/^([^.]+)$/, function (req, res, next) {
@@ -272,7 +249,7 @@ function renderPath(path, res, next) {
 matchRoutes = function (req, res, next) {
   var path = req.path
 
-  if (path.length > 200) {
+  if (typeof path !== 'string' || path.length > 200) {
     return next()
   }
 

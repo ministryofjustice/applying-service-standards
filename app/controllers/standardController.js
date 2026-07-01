@@ -10,7 +10,7 @@ function cleanUpHtml(html) {
         .trim();  // Remove any leading or trailing whitespace
 }
 
-exports.g_home = async function (req, res) {
+exports.g_home = async function (_req, res) {
     const standards = require('../data/content.json');
     return res.render('index', { standards });
 }
@@ -19,7 +19,7 @@ exports.g_home = async function (req, res) {
 exports.g_standard = async function (req, res) {
     const { slug } = req.params;
 
-    if (!slug || slug.length > 100) {
+    if (!slug || typeof slug !== 'string' || slug.length > 100) {
         return res.status(400).send('Invalid request');
     }
 
@@ -58,7 +58,7 @@ exports.g_standard = async function (req, res) {
 exports.g_phase = async function (req, res) {
     const { phase } = req.params;
 
-    if (!phase || phase.length > 100) {
+    if (!phase || typeof phase !== 'string' || phase.length > 100) {
         return res.status(400).send('Invalid request');
     }
 

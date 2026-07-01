@@ -216,7 +216,7 @@ function getLandingPageFields(entry) {
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  */
-exports.g_home = async function (req, res) {
+exports.g_home = async function (_req, res) {
     let mainContent = {};
     let serviceStandards = [];
 
@@ -238,6 +238,7 @@ exports.g_home = async function (req, res) {
                 content_type: 'basic',
                 'fields.pageType': 'Service standard',
                 include: 4,
+                limit: 100,
             })
         ]);
 
