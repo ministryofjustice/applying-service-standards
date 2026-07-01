@@ -1,6 +1,6 @@
 # Project Overview
 
-This is **Apply the Service Standard** — a Node.js web application for Justice Digital (Ministry of Justice) that provides guidance on applying the Government Service Standard.
+This is **Apply the Service Standard** — a Node.js web application for MoJ (Ministry of Justice) that provides guidance on applying the Government Service Standard.
 
 ## Tech Stack
 

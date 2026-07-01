@@ -54,7 +54,7 @@ app.use(favicon(path.join(__dirname, 'public/assets/images', 'favicon.ico')))
 
 app.set('view engine', 'html')
 
-app.locals.serviceName = 'Apply the Service Standard in MoJ'
+app.locals.serviceName = 'Apply the Service Standard in Ministry of Justice'
 
 // Set up Nunjucks as the template engine
 var nunjuckEnv = nunjucks.configure(
@@ -145,7 +145,7 @@ app.post('/submit-feedback', (req, res) => {
       personalisation: {
         feedback: feedback,
         page: fullUrl,
-        service: 'Apply Service Standard in Justice Digital, Data and Science',
+        service: 'Apply Service Standard in Ministry of Justice',
       },
     })
     .then((response) => {})
