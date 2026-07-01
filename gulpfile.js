@@ -12,7 +12,7 @@ gulp.task('process-scss', function () {
   return gulp
     .src('app/assets/scss/**/*.scss')
     .pipe(sass({ 
-      silenceDeprecations: ['import'],
+      silenceDeprecations: ['import', 'global-builtin', 'if-function'],
       loadPaths: ['node_modules']
     }).on('error', sass.logError))
     .pipe(cleanCSS())
