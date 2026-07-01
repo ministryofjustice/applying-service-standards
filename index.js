@@ -86,6 +86,11 @@ app.get('/robots.txt', (_, res) => {
 skipAuth || app.use(isAuthenticated)
 skipAuth || app.use('/auth', authRouter)
 
+// Serve static template pages before Contentful router to avoid slug lookup
+app.get('/site-map', (req, res) => {
+  res.render('site-map.html')
+})
+
 app.use('/', contentfulRouter)
 
 // Render sitemap.xml in XML format
@@ -127,9 +132,7 @@ app.get('/search', (req, res) => {
 })
 
 if (config.env !== 'development') {
-  setTimeout(() => {
-    pageIndex.init()
-  }, 2000)
+  // pageIndex.init() is deferred until the server is confirmed listening (see below)
 }
 
 // TODO - this route is not implemented in the frontend. Should it should be removed?
@@ -286,7 +289,12 @@ matchRoutes = function (req, res, next) {
 
 // Start the server when run directly (not when required for testing)
 if (require.main === module) {
-  app.listen(config.port)
+  app.listen(config.port, () => {
+    console.log(`Server listening on port ${config.port}`)
+    if (config.env !== 'development') {
+      pageIndex.init()
+    }
+  })
 }
 
 module.exports = app
