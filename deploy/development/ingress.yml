@@ -40,6 +40,6 @@ spec:
             # from routing traffic to the service until the deployment is ready.
             # Rename to "node-service" when ready, and the ingress
             # will route traffic to it.
-            name: node-service-disabled
+            name: node-service
             port:
               number: 3052
