@@ -130,7 +130,13 @@ class AuthProvider {
           ? state.successRedirect
           : ''
 
-        res.redirect(`${baseURL}${redirectUri}`)
+        // Explicitly save session to Redis before redirecting to avoid
+        // race condition with Express 5 where the response finalises
+        // before the session store write completes.
+        req.session.save((err) => {
+          if (err) return next(err)
+          res.redirect(`${baseURL}${redirectUri}`)
+        })
       } catch (error) {
         next(error)
       }
@@ -212,7 +218,14 @@ class AuthProvider {
         const authCodeUrlResponse = await msalInstance.getAuthCodeUrl(
           req.session.authCodeUrlRequest,
         )
-        res.redirect(authCodeUrlResponse)
+
+        // Explicitly save session to Redis before redirecting to avoid
+        // race condition with Express 5 where the response finalises
+        // before the session store write completes.
+        req.session.save((err) => {
+          if (err) return next(err)
+          res.redirect(authCodeUrlResponse)
+        })
       } catch (error) {
         next(error)
       }
