@@ -21,6 +21,9 @@ const session = expressSession({
   cookie: {
     httpOnly: true,
     secure: process.env.BASE_URL.startsWith('https://'),
+    // SameSite must be 'none' to allow the session cookie to be sent on
+    // the cross-site POST from login.microsoftonline.com back to /auth/redirect.
+    sameSite: process.env.BASE_URL.startsWith('https://') ? 'none' : 'lax',
   },
 })
 
