@@ -1,6 +1,6 @@
 const expressSession = require('express-session')
 const IORedis = require('ioredis')
-const { RedisStore } = require('connect-redis')
+const RedisStore = require('connect-redis').default
 
 const redisClient = new IORedis({
   host: process.env.REDIS_HOST || 'redis',
